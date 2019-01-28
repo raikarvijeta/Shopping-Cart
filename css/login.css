@@ -1,0 +1,80 @@
+*{
+  box-sizing: border-box;
+}
+body{
+  background-color: #E2DDF1;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
+.main-container {
+  border-radius: 5px;
+  background-color:#e9e9e9;
+  padding: 2px;
+  margin: auto;
+  width: 60%;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+td, tr,th {
+  text-align: left;
+  padding: 5px;
+  border: 2px solid #ddd; /*remove because it display border on every form*/
+}
+td:first-child {
+    text-align: right;
+    padding: 7px;
+}​
+p{
+  padding-left: 10px;
+}
+form {
+  width: 100%;
+  /* border: solid gray 1px; */
+  /* border-radius: 5px; */
+  margin: 5px auto;
+  /* background: white; */
+  padding: 10px;
+}
+
+.header {
+  padding: 2px;
+  text-align: center;
+  background: #4D3AB7;
+  color: white;
+  font-size: 14px;
+}
+
+h2 {
+      text-align: center;
+      color: #010008;
+}
+
+@media all and (max-width:500px){
+    table{
+        width:100%;
+    }
+
+    td{
+        display:block;
+        width:100%;
+    }
+  
+  td:first-child {
+    text-align: left;
+  }
+
+    tr{
+        display:block;
+        margin-bottom:30px;
+    }
+}
+
