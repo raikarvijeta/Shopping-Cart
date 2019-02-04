@@ -1,34 +1,30 @@
 <?php
-include 'adminHeader.php';
 include 'db_connect.php';
+include 'header.php';
+include 'dbCreate.php';
+include 'validation.php';
 
-if(isset($_POST['contactUsBtn'])){
-	submitContactUs();
-}
-function submitContactUs()
+if (isset($_POST['submitButton']))
 {
-	$database=new db_connection;
-	$connection=$database->connectToDatabase();
-	$userName=$_POST["name"];
-	$userEmail=$_POST["email"];
-	$Message=$_POST["message"];
-	$sql = "INSERT INTO contactus (name,email,message) VALUES ('".$userName."','".$userEmail."','".$Message."')";
-	if ($connection->query($sql)==TRUE){
-		echo " Feedback Submited Successfully";
-		$toEmail = "vijeta.raikar@sjinnovation.com";
-		$tittle="FEEDBACK";
-		$mailHeaders = "From: " . $_POST["name"] . "<". $_POST["email"] .">\r\n";
-		if(mail($toEmail,$tittle, $Message, $mailHeaders)) {
-			echo"<p class='success'>Contact Mail Sent.</p>";
-		}else{
-		echo "Error: " . $sql . "<br>" . $connection->error;
+	$fName=($_POST["fName"]);
+	$email=($_POST["email"]);
+	if(($checkValid == "true"))
+	{
+		user::submitContactUs($connection);
 	}
 }
-}
-
 ?>
+<head>
+	<script  src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="js/registerValidation.js"></script>
+	
+</head>
 <div class="main-container"">
-	<form action="contactUs.php" method="POST" id="contactUsFrm" name="contactUsFrm"  onsubmit="return validateContactUs()">
+	<form action="" method="POST" id="contactUsFrm" name="contactUsFrm"  onsubmit="return validateContactUs()">
+		<input type="hidden" name="submit" value="true">
 		<h2>CONTACT US </h2>
 		<div class="container">
 
@@ -37,7 +33,9 @@ function submitContactUs()
 						<label for="name">Name</label>
 					</div>
 					<div class="col-75">
-						<input type="text" id="name" name="name" >
+						<input type="text" id="firstName" name="fName" value="<?php echo $fName;?>">
+						<td><p><span class="error_form" id="firstNameErrorMsg"</span></p></td>
+						<td><span class="error"> <?php echo $fnameError;?></span><br><br></td>
 					</div>
 				</div>
 				<div class="row">
@@ -45,7 +43,9 @@ function submitContactUs()
 						<label for="email">Email Address</label>
 					</div>
 					<div class="col-75">
-						<input type="text" id="email" name="email" >
+						<input type="text" id="email" name="email" value="<?php echo "$email"?>" >
+						<td><span class="error_form" id="emailErrorMsg"></span></td>
+						<td><span class="error"><?php echo $emailError;?></span></td>
 					</div>
 				</div>
 				<div class="row">
@@ -62,7 +62,7 @@ function submitContactUs()
 					</iframe>
 				</div>
 				<div class="row">
-					<input type="submit" name="contactUsBtn" id="contactUsBtn" class="button-purple"   value="SUBMIT">
+					<input type="submit" name="submitButton" id="submitButton" class="button-purple"   value="SUBMIT">
 				</div>
 			</div>
 		</form>

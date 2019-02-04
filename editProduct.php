@@ -1,100 +1,35 @@
 <?php
-include 'adminHeader.php';
+include 'header.php';
 include 'db_connect.php';
+include 'classes/products.php';
+include 'validation.php';
 
 
-$result = listCategories();
-
-if(isset($_GET["id"])) {
-	$rowProduct=getProduct();
+if(isset($_POST["editProductButton"]))
+{
+	if(($checkValid == "true"))
+	{
+		products::updateProduct($connection);
+	}
+	
 }
 
-if(isset($_POST["editProductButton"])) {
-	updateProduct();
-}
-
-function listCategories() {
-	$database = new db_connection;
-	$connection=$database->connectToDatabase();
+function listCategories($connection) {
 	$sql = "SELECT * FROM categories";
 	$result = mysqli_query($connection, $sql);
 	return $result;
 }
+$result = listCategories($connection);
 
-function getProduct(){
-	 $database=new db_connection;
-	 $connection=$database->connectToDatabase();
+function getProduct($connection){
 	 $product_id=$_GET["id"];
 	 $selectSql="SELECT * FROM products WHERE id=$product_id";
 	 $resultProduct = mysqli_query($connection, $selectSql);
 	 $rowProduct = mysqli_fetch_assoc($resultProduct);
 	 return $rowProduct;
 }
-
-function updateProduct(){
- 	$database=new db_connection;
- 	$connection=$database->connectToDatabase();
- 	$product_id=$_POST["hd_Pro_id"];
- 	$pdName=$_POST["Name"];
-	$pdPrice=$_POST["Price"];
-	$pdDescription=$_POST["Description"];
-	$pdQuantity=$_POST["Quantity"];
-	$pdCategory=$_POST["pro_category"];
-
-	if($_FILES["txtImage"])
-	{
-		$product_image = $_FILES["txtImage"]["name"];
-		$target_dir = "image/";
-		$target_file = $target_dir.basename($_FILES["txtImage"]["name"]);
-		$uploadOk = 1;
-		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-		
-		if($_FILES["txtImage"]["tmp_name"])
-		{
-			$check = getimagesize($_FILES["txtImage"]["tmp_name"]);
-			if($check !== false)
-			{
-		        echo "File is an image - " . $check["mime"] . ".";
-		        $uploadOk = 1;
-		    }else{
-		        echo "File is not an image.";
-		        $uploadOk = 0;
-		    }
-		    // Check if no error
-			if ($uploadOk == 0){
-			    echo "Sorry, your file was not uploaded.";
-			} else 
-			{
-			    if (move_uploaded_file($_FILES["txtImage"]["tmp_name"], $target_file)) {
-			        echo "The file ". basename( $_FILES["txtImage"]["name"]). " has been uploaded.";
-			    }else{
-			        echo "Sorry, there was an error uploading your file.";
-			    }
-			}			
-		}
-	}else{
-		
-		$product_image = $_POST["hd_old_img"];
-	}
-
-	$updateSql = "UPDATE  products SET
-	name='$pdName',
-	price='$pdPrice',
-	image='$target_file',
-	quantity='$pdQuantity',
-	description='$pdDescription',
-	updatedOn=NOW(),
-	category_id ='$pdCategory'
-
-	WHERE id= $product_id";
-
-	if ($connection->query($updateSql))
-	{
-	    echo " Updated successfully";
-	    //header('refresh:2; url=product.php');
-	}else{
-	    echo "Error: " . $updateSql . "<br>" . $connection->error;
-	}
+if(isset($_GET["id"])) {
+	$rowProduct=getProduct($connection);
 }
 
 ?>
@@ -105,11 +40,14 @@ function updateProduct(){
 			<tr>
 				<input type="hidden"  value="<?php if(isset($rowProduct['id'])){echo $rowProduct['id'];}?>" name="hd_Pro_id">
 				<td>Name</td>
-				<td><input type="text" value="<?php if(isset($rowProduct['name'])){echo $rowProduct['name'];}?>" id="Name" name="Name" required="required"></td>
+				<td><input type="text" value="<?php if(isset($rowProduct['name'])){echo $rowProduct['name'];}?>" id="Name" name="Name" ></td>
+			
+				<td><span class="error"> <?php echo $productnameError; ?></span><br><br></td>
 			</tr>
 			<tr>
 				<td>Price</td>
-				<td><input type="text"  value="<?php if(isset($rowProduct['price'])){echo $rowProduct['price'];}?>" id="Price" name="Price" required="required"></td>
+				<td><input type="text"  value="<?php if(isset($rowProduct['price'])){echo $rowProduct['price'];}?>" id="Price" name="Price" ></td>
+				<td><span class="error"> <?php echo $priceError; ?></span><br><br></td>
 			</tr>
 			<tr>
 			<td>Description</td>
@@ -125,6 +63,10 @@ function updateProduct(){
 			<span>Existing Image:<?php echo $rowProduct['image']?></span>
 			<input type="hidden" value="<?php echo $rowProduct['image']?>" name="hd_old_img" id="hd_old_image"/>
 			</td >
+		</tr>
+		<tr>
+			<td>Featured</td>
+			<td><input type="checkbox" name="is_featured" value="<?php if(isset($rowProduct['is_featured'])) {echo $rowProduct['is_featured'];} else echo 1;?>" id="is_featured" <?php if($rowProduct['is_featured'] == 1) { echo "checked"; } ?>></td>
 		</tr>
 		<tr>
 				<td> Category</td>
@@ -150,11 +92,14 @@ function updateProduct(){
 			</tr>
 			<tr>
 				<td>
-					
-				</td>
+					<a href="http://cart.dev/Product.php" onclick="history.go(-1)">Go Back</a>
+				</td>	
+
 				<td>
 					<input type="submit"  id="editProductButton" name="editProductButton"  class="button-purple"   value="UPDATE">
+				
 				</td>
+
 			</tr>
 		
 		</table>

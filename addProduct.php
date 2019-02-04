@@ -1,89 +1,25 @@
 <?php 
-
-include 'adminHeader.php';
+include 'header.php';
 include 'db_connect.php';
+include 'classes/products.php';
+include 'validation.php';
 
+if(isset($_POST["addPdBttn"]))
+	{
+		if(($checkValid == "true"))	
+		{
+			products:: addProduct($connection);
+		}
+	}
 
-if(isset($_POST["addPdBttn"])) {
-	addProduct();
-}
-
-
-function listCategories() {
-	$database = new db_connection;
-	$connection=$database->connectToDatabase();
+function listCategories($connection)
+{
 	$sql = "SELECT * FROM categories";
 	$result = mysqli_query($connection, $sql);
 	return $result;
 }
 
-$result = listCategories();
-
-
-function addProduct()
-{
-
-	$database = new db_connection;
-	$connection=$database->connectToDatabase();
-	$pdName=$_POST["Name"];
-	$pdPrice=$_POST["Price"];
-	$pdDescription=$_POST["Description"];
-	$pdQuantity=$_POST["Quantity"];
-	$pdCategory=$_POST["pro_category"];
-
-
-	if($_FILES["txtImage"])
-	{
-		$product_image = $_FILES["txtImage"]["name"];
-		$target_dir = "image/";
-		$target_file = $target_dir.basename($_FILES["txtImage"]["name"]);
-		$uploadOk = 1;
-		$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-		// Check if image file of image type
-		if($_FILES["txtImage"]["tmp_name"])
-		{
-			$check = getimagesize($_FILES["txtImage"]["tmp_name"]);
-			if($check !== false)
-			{
-		        echo "File is an image - " . $check["mime"] . ".";
-		        $uploadOk = 1;
-		    }else{
-		        echo "File is not an image.";
-		        $uploadOk = 0;
-		    }
-		    // Check if no error
-			if ($uploadOk == 0){
-			    echo "Sorry, your file was not uploaded.";
-			} else 
-			{
-			    if (move_uploaded_file($_FILES["txtImage"]["tmp_name"], $target_file)) {
-			        echo "The file ". basename( $_FILES["txtImage"]["name"]). " has been uploaded.";
-			    }else{
-			        echo "Sorry, there was an error uploading your file.";
-			    }
-			}			
-		}
-	}else{
-		
-		$product_image  = null;
-	}
-
-	if(isset($_POST["is_featured"])){
-		$is_featured=1;
-	}else{
-		$is_featured=0;
-	}
-
-	$sql = "INSERT INTO products(name,price,image,quantity,description,category_id,	createdOn,updatedOn,is_featured) VALUES ('$pdName','$pdPrice','$target_file','$pdQuantity','$pdDescription','$pdCategory',NOW(),NOW(),'$is_featured')";
-
-	if ($connection->query($sql))
-	{
-	    echo " added successfully";
-	    header('refresh:2; url=addProduct.php');
-	}else{
-	    echo "Error: " . $sql . "<br>" . $connection->error;
-	}
-}
+$result = listCategories($connection);
 
 ?>
 <div class="main-container"">
@@ -93,11 +29,17 @@ function addProduct()
 			<tr>
 				<td>Name</td>
 				<td><input type="text" id="Name" name="Name" ></td>
+				
+				<td><span class="error"> <?php echo $productnameError; ?></span><br><br></td>
+
 			</tr>
 			<tr>
 				<td>Price</td>
 				<td>
 					<input type="text" id="Price" name="Price">
+					
+					<td><span class="error"> <?php echo $priceError; ?></span><br><br></td>
+
 				</td>
 
 			</tr>
@@ -112,6 +54,7 @@ function addProduct()
 		<tr>
 			<td>Image</td>
 			<td><input type="file" id="txtImage" name="txtImage"  accept="image/*" ></td >
+			<td><span class="error"> <?php echo $imageError; ?></span><br><br></td>
 		</tr>
 		<tr>
 			<td>Featured</td>
@@ -133,7 +76,7 @@ function addProduct()
 			</tr>
 			<tr>
 				<td>
-					
+						<a href="http://cart.dev/Product.php" onclick="history.go(-1)">Go Back</a>
 				</td>
 				<td>
 					<input type="submit"   id="addPdBttn" name="addPdBttn"  class="button-purple"   value="ADD">
@@ -143,5 +86,5 @@ function addProduct()
 		</table>
 	</form>
 </div>
-<?php include 'adminFooter.php';?>
+<!-- <?php include 'adminFooter.php';?> -->
 

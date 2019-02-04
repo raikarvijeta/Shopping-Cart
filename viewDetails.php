@@ -1,5 +1,5 @@
 <?php 
-include 'adminHeader.php';
+include 'header.php';
 include 'db_connect.php';
 
 if(isset($_GET["id"])) {
@@ -23,11 +23,7 @@ function viewProductDetails(){
 <?php require 'resources/fbShare.php'?>
 <div class="main-container">
 	<div class="fb-like" data-href="http://cart.dev/viewDetails.php?id=<?php echo $id ?>" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
-	</div>
-	<div>
-		
-	</div>
-	<?php
+		<?php
 	if (mysqli_num_rows($result) > 0) { 
 		while($row = mysqli_fetch_assoc($result)) { ?>
 			<ul class="product-details ">
@@ -63,5 +59,11 @@ function viewProductDetails(){
 		</ul>
 	<?php } 
 }?>
+	</div>
+	
+	<a href="http://cart.dev/Product.php" onclick="history.go(-1)">Go Back</a>
+
+
+
 </div>
 </body>

@@ -1,27 +1,15 @@
 <?php
-include 'adminHeader.php';
+include 'header.php';
 include 'db_connect.php';
+include 'classes/category.php';
 
 if (isset($_POST['addCategoryButton'])) {
-    addCategory();
-}
-
-function addCategory() {
-	$database = new db_connection;
-	$connection=$database->connectToDatabase();
-	$categoryName = $_POST["categoryName"];
-	$sql = "INSERT INTO categories (name) VALUES ('".$categoryName."')";
-	if ($connection->query($sql) === TRUE){
-		echo "Category added successfully";
-	    //header('refresh:2; url=categories.php');
-	}else{
-		echo "Error: " . $sql . "<br>" . $connection->error;
-	}
+    categories::addCategory($connection);
 }
 
 ?>
 
-<div class="main-container"">
+<div class="main-container">
 	<form action="addCategory.php" method="POST" id="addCategoryForm" name="addCategoryForm"  onsubmit="return validateCategory()">
 		<h2>ADD CATEGORIES</h2>
 		<table>
@@ -37,5 +25,6 @@ function addCategory() {
 		</table>
 	</form>
 </div>
+	<a href="http://cart.dev/Product.php" onclick="history.go(-1)">Go Back</a>
 
 <?php include 'adminFooter.php';?>

@@ -2,6 +2,7 @@
 .button-purple{background-color: #4D3AB7;}
 .button-red{background-color: #f44336;}
 .button-green {background-color: #4CAF50;}
+.button-blue{background-color:#000080;}
 
 
 
@@ -21,7 +22,7 @@ select{
    margin-left: 23%;
 }
 
-input[type=submit] {
+input[type=submit],[type=button]{
   /*background-color: #4D3AB7;*/
   color: white;
   padding: 12px 20px;
@@ -44,4 +45,10 @@ input[type=submit] {
    background-color: red;
   /*border: 3px solid #73AD21;*/
 
+}
+
+.form-container{
+   border-radius: 20px;
+  background-color:#f2f2f2;
+  padding: 20px;
 }

@@ -146,7 +146,7 @@ function validateVerifyPassword() {
 
 
 function validateEmail(email){
-	var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	var expr = /([\w\-]+\@[\w\-]+\.[\w\-]+)/;
 	return expr.test(email);
 }
 
@@ -229,18 +229,7 @@ function removeSpaces(string){
             return string.split(' ').join('');
           }
 
-
-
-
-
-
-
-
-
-
-
-
-    $("#registerForm").submit(function() {
+  $("#registerForm").submit(function() {
 		
 		firstNameError=false;
 		lastNameError= false;
@@ -277,10 +266,6 @@ function removeSpaces(string){
 
 	});
 
-
-
-
-
 });
 
 
@@ -299,8 +284,8 @@ function generateCaptcha(){
 }
 
 
-// } );
-	
+
+
 
 
 

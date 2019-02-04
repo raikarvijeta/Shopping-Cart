@@ -68,3 +68,16 @@ function validateaddProduct(){
 	
 }
 
+function validatelogin(){
+	var email=document.getElementById("email").value;
+	if (email.trim() == ""){
+		alert("Please enter Email Address");
+		return false;
+	}
+	var password=document.getElementById("password").value;
+	if (password.trim() == ""){
+		alert("Please Enter Valid Password");
+		return false;
+	}
+	
+}

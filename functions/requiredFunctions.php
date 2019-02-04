@@ -12,4 +12,5 @@ function getRandomBytes($nbBytes = 32){
 function generatePassword($length){
 	return substr(preg_replace("/[^a-zA-Z0-9]/", "", base64_encode(getRandomBytes($length+1))),0,$length);
 }
+
 ?>
