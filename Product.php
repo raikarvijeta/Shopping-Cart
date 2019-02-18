@@ -3,13 +3,14 @@ include 'header.php';
 include 'db_connect.php';
 include 'classes/products.php';
 include 'navBar.php';
+include 'importExport.php';
 
-if (isset($_GET['delete_product_id'])) {
+if (isset($_GET['delete_product_id']))
+{
    products::deleteProduct($connection);
 }
-
-
-function listProduct($connection){
+function listProduct($connection)
+{
 	$sql = "SELECT p.id,p.name, p.price, p.description, p.quantity, p.image, p.is_featured, c.name as category_name
 			FROM products p
 		    INNER JOIN categories c ON p.category_id = c.id
@@ -17,35 +18,53 @@ function listProduct($connection){
 		    $result = mysqli_query($connection, $sql);
 		    return $result;
 }
-
 $result=listProduct($connection);
-
 ?>
-
 <head>
 	<script type="text/javascript" src="js/adminValidations.js"></script>
 </head>
 <div class="main-container" >
-	<form action="addProduct.php" method="POST" id="addCategoryForm" name="addCategoryForm" enctype="multipart/form-data">
+	<form action="" method="POST" id="productForm" name="productForm" enctype="multipart/form-data">
 		<h2>  LIST PRODUCTS </h2>
 		<div style="overflow-x:auto;">
-					<table>
-			<thead>
-				<tr>
-					<th colspan="10">
-						<input type="submit" id="addCategoryButton" name="addCategoryButton"  class="button-purple"  href="addProduct.php" value="ADD PRODUCT">
-					</th>
+			<table>
+				<thead>
+					<tr>
+						<th colspan="11">
+
+							<a href="http://cart.sj/addProduct.php">
+								<input type="button" name="addCategoryButton" id="addCategoryButton" value=" ADD PRODUCT" class="button-purple" >
+							</a>
+						</th>
+					
+						<th colspan="11">
+							<a href="export.php">
+								<input type="button" id="export-btn" name="export-btn"  class="button-purple"  value="EXPORT" />
+							</a>
+						</th>
+					</tr>
+					<tr>
+						<form action="importExport.php" method="POST">
+						<th colspan="11">
+							<label>Select File</label>
+							<input type="file" name="file" id="file" class="input-large">
+						</th>
+
+						<th>
+							<input type="submit" id="import-btn" name="import-btn"  class="button-purple"   value="IMPORT">
+						</th>
+					</form>
 				</tr>
 				<tr>
-					<th>NAME</th>
-					<th>PRICE</th>
-					<th>DESCRIPTION</th>
-					<th>QUANTITY</th>
-					<th>IMAGE</th>
-					<th>CATEGORY</th>
-					<th>FEATURED</th>
+						<th>NAME</th>
+						<th>PRICE</th>
+						<th>DESCRIPTION</th>
+						<th>QUANTITY</th>
+						<th>IMAGE</th>
+						<th>CATEGORY</th>
+						<th>FEATURED</th>
 
-					<th colspan="3">ACTIONS</th>
+					<th colspan="4">ACTIONS</th>
 				</tr>
 				<tbody>
 					<tbody>
@@ -74,6 +93,12 @@ $result=listProduct($connection);
 						</td>
 
 						<td>
+							<a href="productImage.php?id=<?php echo $row["id"] ?>">
+								<input type="button" name="btnProductImage" id="btnProductImage" value="Images" class="button-orange" >
+							</a>
+						</td>
+
+						<td>
 							<a href="editProduct.php?id=<?php echo $row["id"] ?>">
 								<input type="button" name="btnEditProduct" id="btnEditProduct" class="button-green" value="Edit" >
 							</a>
@@ -83,25 +108,21 @@ $result=listProduct($connection);
 							onclick="return deleteProduct(<?php echo $row['id'];?>);"/>
 							
 						</td>
-
-				</tr>
+					</tr>
 		<?php } 
 	} else { ?>
     				<tr>
-    					<td colspan="6">
+    					<td colspan="11">
     						No Products Available
     					</td>
     				</tr>
 <?php }
+
 				?>
-				
 			</tbody>
 				</tbody>
 			</thead>
 		</table>
-			
 		</div>
-
 	</form>
 </div>
-

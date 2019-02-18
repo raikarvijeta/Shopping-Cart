@@ -34,7 +34,7 @@ if(isset($_GET["id"])) {
 
 ?>
 <div class="main-container"">
-	<form action="" method="POST" id=""  id="addProductForm" name="addProductForm" enctype="multipart/form-data">
+	<form action="" method="POST" id=""  id="editProductForm" name="editProductForm" enctype="multipart/form-data">
 		<h2>EDIT PRODUCTS</h2>
 		<table>
 			<tr>
@@ -65,6 +65,10 @@ if(isset($_GET["id"])) {
 			</td >
 		</tr>
 		<tr>
+			<td>Select Product Images to Upload</td>
+			<td><input type="file" name="multiple-imgProduct[]" id="multiple-imgProduct" accept="image/*" multiple></td>
+		</tr>
+		<tr>
 			<td>Featured</td>
 			<td><input type="checkbox" name="is_featured" value="<?php if(isset($rowProduct['is_featured'])) {echo $rowProduct['is_featured'];} else echo 1;?>" id="is_featured" <?php if($rowProduct['is_featured'] == 1) { echo "checked"; } ?>></td>
 		</tr>
@@ -92,7 +96,7 @@ if(isset($_GET["id"])) {
 			</tr>
 			<tr>
 				<td>
-					<a href="http://cart.dev/Product.php" onclick="history.go(-1)">Go Back</a>
+					<a href="http://cart.sj/Product.php" onclick="history.go(-1)">Go Back</a>
 				</td>	
 
 				<td>

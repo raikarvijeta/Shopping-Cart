@@ -1,9 +1,4 @@
 * {box-sizing: border-box}
-/*body {font-family: Verdana, sans-serif; margin:0}
-.mySlides {display: none}
-img {vertical-align: middle;}
-*/
-/* Slideshow container */
 .slideshow-container {
   max-width:30%;
   position: relative;
@@ -15,7 +10,6 @@ img {
   width: 100%;
 
 }
-/* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
   position: absolute;
@@ -30,8 +24,6 @@ img {
   border-radius: 0 3px 3px 0;
   user-select: none;
 }
-
-/* Position the "next button" to the right */
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
@@ -100,3 +92,4 @@ img {
 @media only screen and (max-width: 300px) {
   .prev, .next,.text {font-size: 11px}
 }
+
