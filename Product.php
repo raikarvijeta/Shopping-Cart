@@ -9,16 +9,9 @@ if (isset($_GET['delete_product_id']))
 {
    products::deleteProduct($connection);
 }
-function listProduct($connection)
-{
-	$sql = "SELECT p.id,p.name, p.price, p.description, p.quantity, p.image, p.is_featured, c.name as category_name
-			FROM products p
-		    INNER JOIN categories c ON p.category_id = c.id
-		    ORDER BY createdOn DESC";
-		    $result = mysqli_query($connection, $sql);
-		    return $result;
-}
-$result=listProduct($connection);
+
+$result = products::listProduct($connection);
+
 ?>
 <head>
 	<script type="text/javascript" src="js/adminValidations.js"></script>
@@ -31,12 +24,10 @@ $result=listProduct($connection);
 				<thead>
 					<tr>
 						<th colspan="11">
-
-							<a href="http://cart.sj/addProduct.php">
+							<a href="<?php echo BASE_URL; ?>/addProduct.php">
 								<input type="button" name="addCategoryButton" id="addCategoryButton" value=" ADD PRODUCT" class="button-purple" >
 							</a>
 						</th>
-					
 						<th colspan="11">
 							<a href="export.php">
 								<input type="button" id="export-btn" name="export-btn"  class="button-purple"  value="EXPORT" />
@@ -94,7 +85,7 @@ $result=listProduct($connection);
 
 						<td>
 							<a href="productImage.php?id=<?php echo $row["id"] ?>">
-								<input type="button" name="btnProductImage" id="btnProductImage" value="Images" class="button-orange" >
+						<input type="button" name="btnProductImage" id="btnProductImage" value="Images" class="btn-orange">
 							</a>
 						</td>
 

@@ -2,41 +2,26 @@
 include 'header.php';
 include 'db_connect.php';
 include 'dbCreate.php';
+include 'classes/products.php';
 
 $id=$_GET["id"];
 
-function viewProductDetails($connection)
-{
-	$productId = $_GET["id"];
-	$viewSql=" SELECT p.name,p.price, p.description, p.quantity, p.image,c.name as category_name
-			   FROM products p
-			   INNER JOIN categories as c ON p.category_id = c.id AND p.id = ". $productId;
-	$result = mysqli_query($connection, $viewSql);
-	return $result;
-}
 if(isset($_GET["id"]))
 {
-	$result = viewProductDetails($connection);
+	$result =products::viewProductDetails($connection);
 }
 
-function listQuantity($connection)
-{
-	$quantityId=$_GET["id"];
-	$sql="SELECT quantity FROM products WHERE id= $quantityId";
-	$result=mysqli_query($connection,$sql);
-	$row = mysqli_fetch_assoc($result);
-	return $row['quantity'];
-}
 if (isset($_GET["id"]))
 {
-	$quantity=listQuantity($connection);
+	$quantity=products::listQuantity($connection);
 }
+
 ?>
 
 <?php require 'resources/fbShare.php'?>
 <div class="main-container">
 	<td>
-		<a href="http://cart.sj/Product.php" onclick="history.go(-1)">Go Back</a>
+		<a href="<?php echo BASE_URL?>/Product.php" onclick="history.go(-1)">Go Back</a>
 	</td>
 	<div class="box-container">
 		<?php
@@ -97,8 +82,9 @@ if (isset($_GET["id"]))
 			<?php
 
 				$imgIndex = 0;
-				$query=$connection->query("SELECT image FROM product_image WHERE product_id = $id");
-				while($row = mysqli_fetch_array($query))
+				$sql="SELECT image FROM product_image WHERE product_id = $id";
+				$result=mysqli_query($connection,$sql);
+				while($row = mysqli_fetch_array($result))
 				{
 					$imgIndex++;
 					$image=$row['image'];
@@ -127,7 +113,7 @@ if (isset($_GET["id"]))
 			</select>
 			<input type="submit" id="addToCart" name="addToCart"  class="button-purple"  value="ADD TO CART" />
 
-			<div class="fb-like" data-href="http://cart.sj/viewDetails.php?id=<?php echo $id ?>" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="true">
+			<div class="fb-like" data-href="<?php echo BASE_URL?>/viewDetails.php?id=<?php echo $id ?>" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="true">
 		
 	</div>
 		</form>
